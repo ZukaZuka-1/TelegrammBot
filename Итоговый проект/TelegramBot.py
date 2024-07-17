@@ -7,12 +7,17 @@ bot = telebot.TeleBot(TOKEN)
 
 @bot.message_handler(commands=['start'])
 def send_welcome(message: telebot.types.Message):
-    bot.reply_to(message, f"Приветствую, {message.chat.username}.\nМеня зовут Семён, я бот конвертирующий одну валюту в другую.")
+    bot.reply_to(message, f"Приветствую, {message.chat.username}.\nМеня зовут Семён,"
+                          f" я бот конвертирующий одну валюту в другую.")
 
 
 @bot.message_handler(commands=['help'])
 def send_rules(message: telebot.types.Message):
-    bot.reply_to(message, f"Чтобы я начал работать пожалуйста введите:\n<имя валюты, цену которой он хочет узнать>\n<имя валюты, в которой надо узнать цену первой валюты>\n<количество первой валюты>\nПример ввода: Евро Рубль 1\nДля того чтобы увидеть список доступной валюты, введите команду /values")
+    bot.reply_to(message, f"Чтобы я начал работать пожалуйста "
+                          f"введите:\n<имя валюты, цену которой он хочет узнать>\n<имя "
+                          f"валюты, в которой надо узнать цену первой валюты>\n<количество "
+                          f"первой валюты>\nПример ввода: Евро Рубль 1\nДля того чтобы "
+                          f"увидеть список доступной валюты, введите команду /values")
 
 
 @bot.message_handler(commands=['values'])
@@ -32,7 +37,7 @@ def convert(message: telebot.types.Message):
             raise APIException('Ознакомьтесь с правилами.')
 
         quote, base, amount = values
-        total_base = ValuesConverter.convert(quote, base, amount)
+        total_base = ValuesConverter.get_prise(quote, base, amount)
     except APIException as e:
         bot.reply_to(message, f'Неверный ввод\n{e}')
     except Exception as e:
@@ -40,7 +45,6 @@ def convert(message: telebot.types.Message):
     else:
         text = f'Цена {amount} {quote} в {base} - {total_base}'
         bot.send_message(message.chat.id, text)
-
 
 
 bot.polling()
